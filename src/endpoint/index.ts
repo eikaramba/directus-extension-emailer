@@ -1,4 +1,5 @@
 import { OperationApiConfig } from '@directus/extensions';
+import { log } from 'directus:api';
 import { md } from '../utils/md';
 import { Attachment, MailMessage, Options, StreamAttachment } from '../utils/_types';
 
@@ -127,7 +128,6 @@ const config: OperationApiConfig<Options> = {
     };
 
     router.post("/", async (req, res) => {
-      console.log("Email request received via POST endpoint");
       const accountability = req.accountability || { user: null, role: null };
       const context = {
         accountability,
