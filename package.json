@@ -19,7 +19,7 @@
     "entries": [
       {
         "type": "operation",
-        "name": "sendEmail",
+        "name": "emailer-operation",
         "source": {
           "app": "src/operation/app.ts",
           "api": "src/operation/api.ts"
@@ -27,7 +27,7 @@
       },
       {
         "type": "endpoint",
-        "name": "emailer",
+        "name": "emailer-endpoint",
         "source": "src/endpoint/index.ts"
       }
   ]},
@@ -37,12 +37,16 @@
 		"link": "directus-extension link"
 	},
   "devDependencies": {
+    "@directus/extensions": "^3.0.6",
 		"@directus/extensions-sdk": "13.1.1",
     "typescript": "^5.8.3",
-    "vue": "^3.5.16"
+    "vue": "^3.5.16",
+    "@types/sanitize-html": "^2.16.0"
   },
   "dependencies": {
-    "npm-watch": "^0.11.0"
+    "npm-watch": "^0.11.0",
+    "marked": "^15.0.2",
+    "sanitize-html": "^2.17.0"
   },
 	"repository": {
 		"type": "git",

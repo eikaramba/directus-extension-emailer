@@ -1,4 +1,8 @@
-export default {
+import { OperationApiConfig } from '@directus/extensions';
+import { md } from '../utils/md';
+import { Attachment, MailMessage, Options, StreamAttachment } from '../utils/_types';
+
+const config: OperationApiConfig<Options> = {
   id: "emailer",
   handler: (router, { services, env }) => {
     const { AssetsService, MailService } = services;
@@ -67,19 +71,30 @@ export default {
         };
 
         const createEmailObject = async (payload) => {
-          const mail = {
+          const mail: MailMessage = {
             to: payload.to,
             subject: payload.subject,
             attachments: payload.attachments || [],
           };
 
-          if (payload.template == null) {
-            mail.html = payload.body;
-          } else {
+          if (payload.from) mail.from = payload.from;
+
+          const safeBody = typeof payload.body !== 'string' ? JSON.stringify(payload.body) : payload.body;
+
+          if (payload.type === 'template') {
             mail.template = {
-              name: payload.template.name,
-              data: payload.template.data,
+              name: payload.template || 'base',
+              data: payload.data || {},
             };
+          } else {
+            mail.html = payload.type === 'wysiwyg' ? safeBody : md(safeBody);
+          }
+
+          mail.attachments = payload.attachments;
+
+          // Reset attachments field
+          if (mail.attachments == null) {
+            mail.attachments = new Array();
           }
 
           if (payload.files != null && payload.files.length > 0) {
@@ -134,3 +149,5 @@ export default {
     });
   },
 };
+
+export default config;

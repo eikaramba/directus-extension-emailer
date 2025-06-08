@@ -4,6 +4,7 @@ export type Options = {
 	to: string;
 	type: 'wysiwyg' | 'markdown' | 'template';
   attachments?: string;
+  files?: string;
 	subject: string;
 	body?: string;
 	template?: string;
@@ -15,14 +16,15 @@ export type Options = {
 
 // ...existing code...
 export default defineOperationApi<Options>({
-  id: "send-email",
+  id: "emailer",
   handler: async (options: Options, { env, logger, accountability, getSchema }) => {
-    const endpointUrl = `${env.PUBLIC_URL}/emailer`;
+
+    console.log("Executing emailer operation with options:", options);
 
     let fileIds: string[] = [];
-    if (options.attachments && typeof options.attachments === 'string') {
-      // Assuming attachments is a comma-separated string of file IDs
-      fileIds = options.attachments.split(',').map(id => id.trim()).filter(id => id);
+    if (options.files && typeof options.files === 'string') {
+      // Assuming files is a comma-separated string of file IDs
+      fileIds = options.files.split(',').map(id => id.trim()).filter(id => id);
     }
 
     // Construct payload based on what the endpoint `index.ts` actually consumes
@@ -33,6 +35,7 @@ export default defineOperationApi<Options>({
         name: string;
         data?: Record<string, any>;
       },
+      attachments?: string;
       files?: string[];
 	    body?: string;
       // The endpoint also accepts 'list' and 'attachments' (pre-formatted array),
@@ -44,11 +47,15 @@ export default defineOperationApi<Options>({
 
     if (options.type === 'template' && options.template) {
       endpointPayload.template = {
-		name: options.template,
-		data: options.data,
+      name: options.template,
+      data: options.data,
 	  };
     } else if ((options.type === 'wysiwyg') && options.body) {
       endpointPayload.body = options.body;
+    }
+
+    if (options.attachments) {
+      endpointPayload.attachments = options.attachments;
     }
 
     if (fileIds.length > 0) {
