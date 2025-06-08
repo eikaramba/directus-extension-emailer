@@ -127,4 +127,4 @@ You can include both attachments and Directus files in your email notification.
 
 ## Acknowledgements
 
-This repo was cloned from [Directus eMailer](https://github.com/ryntab/Directus-Mailer) and modified to support attachments and to add a Flow Operation Node.
+This repo was cloned from [Directus eMailer](https://github.com/ryntab/Directus-Mailer) and modified to support attachments and to add a Flow Operation Node. I also incorporated ui changes from https://github.com/nerkarso/directus-extensions/tree/master/operations/mailer.
