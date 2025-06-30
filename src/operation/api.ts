@@ -37,12 +37,18 @@ export default defineOperationApi<Options>({
       },
       attachments?: string;
       files?: string[];
-	    body?: string;
+     body?: string;
+      cc?: string;
+      bcc?: string;
+      replyTo?: string;
       // The endpoint also accepts 'list' and 'attachments' (pre-formatted array),
       // but these are not directly available or in the correct format from `options`.
     } = {
       to: options.to,
       subject: options.subject,
+      cc: options.cc,
+      bcc: options.bcc,
+      replyTo: options.replyTo,
     };
 
     if (options.type === 'template' && options.template) {
@@ -63,9 +69,6 @@ export default defineOperationApi<Options>({
     }
 
     // Properties like cc, bcc, replyTo are in Options but not handled by the endpoint's `create` function.
-    if (options.cc || options.bcc || options.replyTo) {
-        logger.warn("cc, bcc, or replyTo options provided, but the current '/emailer' endpoint does not handle them. Consider updating the endpoint to pass these to MailService.");
-    }
 
     // Remove undefined keys to keep payload clean, though `fetch` handles undefined fine.
     Object.keys(endpointPayload).forEach(key => (endpointPayload as Record<string, any>)[key] === undefined && delete (endpointPayload as Record<string, any>)[key]);

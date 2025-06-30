@@ -79,6 +79,9 @@ const config: OperationApiConfig<Options> = {
           };
 
           if (payload.from) mail.from = payload.from;
+          if (payload.cc) mail.cc = payload.cc;
+          if (payload.bcc) mail.bcc = payload.bcc;
+          if (payload.replyTo) mail.replyTo = payload.replyTo;
 
           const safeBody = typeof payload.body !== 'string' ? JSON.stringify(payload.body) : payload.body;
 
